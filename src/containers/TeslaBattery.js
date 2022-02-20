@@ -4,6 +4,8 @@ import { getModelData } from "../services/BatteryService";
 import TeslaNotice from "../components/TeslaNotice/TeslaNotice";
 import TeslaCar from "../components/TeslaCar/TeslaCar";
 import TeslaStats from "../components/TeslaStats/TeslaStats";
+import TeslaCounter from "../components/TeslaCounter/TeslaCounter";
+import TeslaClimate from "../components/TeslaClimate/TeslaClimate";
 
 // This component is responsible for creating and managing data and state as a container component
 class TeslaBattery extends React.Component {
@@ -12,6 +14,10 @@ class TeslaBattery extends React.Component {
 
         this.calculateStats = this.calculateStats.bind(this);
         this.statsUpdate = this.statsUpdate.bind(this);
+        this.increment = this.increment.bind(this);
+        this.decrement = this.decrement.bind(this);
+        this.updateCounterState = this.updateCounterState.bind(this);
+        this.handleChangeClimate = this.handleChangeClimate.bind(this);
 
         this.state = {
             carstats: [],
@@ -48,6 +54,62 @@ class TeslaBattery extends React.Component {
         this.statsUpdate();
     };
 
+    updateCounterState(title, newValue) {
+        const config = { ...this.state.config };
+        // update config state with new value
+        title === 'Speed' ? config['speed'] = newValue : config['temperature'] = newValue;
+        // update our state
+        this.setState({ config });
+    }
+
+    // handle aircon & heating click event handler
+    handleChangeClimate() {
+        const config = { ...this.state.config };
+        config['climate'] = !this.state.config.climate;
+        this.setState({ config });
+    }
+
+    increment(e, title) {
+        e.preventDefault();
+        let currentValue, maxValue, step;
+        const { speed, temperature } = this.props.counterDefaultVal;
+        if (title === 'Speed') {
+          // Herer we check the props to see if a key of speed is what was clicked
+          currentValue = this.state.config.speed;
+          maxValue = speed.max;
+          step = speed.step;
+          // we add according to the step/rate
+        } else {
+          currentValue = this.state.config.temperature;
+          maxValue = temperature.max;
+          step = temperature.step;
+        }
+        if (currentValue < maxValue) {
+          const newValue = currentValue + step;
+          this.updateCounterState(title, newValue);
+        }
+    }
+
+    // decrement is the same with increment but we subtract from the value with the step as a rate
+    decrement(e, title) {
+        e.preventDefault();
+        let currentValue, minValue, step;
+        const { speed, temperature } = this.props.counterDefaultVal;
+        if (title === 'Speed') {
+          currentValue = this.state.config.speed;
+          minValue = speed.min;
+          step = speed.step;
+        } else {
+          currentValue = this.state.config.temperature;
+          minValue = temperature.min;
+          step = temperature.step;
+        }
+        if (currentValue > minValue) {
+          const newValue = currentValue - step;
+          this.updateCounterState(title, newValue);
+        }
+    }
+
 
     render() {
         const { config, carstats } = this.state;
@@ -57,6 +119,25 @@ class TeslaBattery extends React.Component {
                 <h1>Range Per Charge</h1>
                 <TeslaCar wheelSize = { config.wheels } />
                 <TeslaStats carstats = { carstats } />
+                <div className="tesla-controls cf">
+                    <TeslaCounter 
+                        currentValue = { this.state.config.speed }
+                        initValues = { this.props.counterDefaultVal.speed }
+                        increment = { this.increment }
+                        decrement = { this.decrement }
+                    />
+                    <TeslaCounter
+                        currentValue = { this.state.config.temperature }
+                        initValues = { this.props.counterDefaultVal.temperature }
+                        increment = { this.increment }
+                        decrement = { this.decrement }
+                    />
+                    <TeslaClimate
+                        value = { this.state.config.climate }
+                        limit = { this.state.config.temperature > 10 }
+                        handleChangeClimate = { this.handleChangeClimate }
+                    />
+                </div>
                 <TeslaNotice /> 
             </form>
          );
