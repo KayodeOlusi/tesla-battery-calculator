@@ -6,6 +6,7 @@ import TeslaCar from "../components/TeslaCar/TeslaCar";
 import TeslaStats from "../components/TeslaStats/TeslaStats";
 import TeslaCounter from "../components/TeslaCounter/TeslaCounter";
 import TeslaClimate from "../components/TeslaClimate/TeslaClimate";
+import TeslaWheels from "../components/TeslaWheels/TeslaWheels";
 
 // This component is responsible for creating and managing data and state as a container component
 class TeslaBattery extends React.Component {
@@ -18,6 +19,7 @@ class TeslaBattery extends React.Component {
         this.decrement = this.decrement.bind(this);
         this.updateCounterState = this.updateCounterState.bind(this);
         this.handleChangeClimate = this.handleChangeClimate.bind(this);
+        this.handleChangeWheels = this.handleChangeWheels.bind(this);
 
         this.state = {
             carstats: [],
@@ -59,14 +61,21 @@ class TeslaBattery extends React.Component {
         // update config state with new value
         title === 'Speed' ? config['speed'] = newValue : config['temperature'] = newValue;
         // update our state
-        this.setState({ config });
+        this.setState({ config }, () => {this.statsUpdate()});
     }
+
+    // handle wheels click event handler
+    handleChangeWheels(size) {
+        const config = {...this.state.config};
+        config['wheels'] = size;
+        this.setState({ config }, () => {this.statsUpdate()});
+      }
 
     // handle aircon & heating click event handler
     handleChangeClimate() {
         const config = { ...this.state.config };
         config['climate'] = !this.state.config.climate;
-        this.setState({ config });
+        this.setState({ config }, () => {this.statsUpdate()});
     }
 
     increment(e, title) {
@@ -136,6 +145,10 @@ class TeslaBattery extends React.Component {
                         value = { this.state.config.climate }
                         limit = { this.state.config.temperature > 10 }
                         handleChangeClimate = { this.handleChangeClimate }
+                    />
+                    <TeslaWheels
+                        value = { this.state.config.wheels }
+                        handleChangeWheels = { this.handleChangeWheels }
                     />
                 </div>
                 <TeslaNotice /> 
