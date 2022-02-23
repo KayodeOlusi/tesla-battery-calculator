@@ -87,12 +87,12 @@ const temperatureUpState = {
   
 const temperatureDownState = {
     carstats:[
-      {miles:261, model:"60"},
-      {miles:268, model:"60D"},
-      {miles:316, model:"75"},
-      {miles:327, model:"75D"},
-      {miles:359, model:"90D"},
-      {miles:389, model:"P100D"}
+      { miles:261, model:"60" },
+      { miles:268, model:"60D" },
+      { miles:316, model:"75" },
+      { miles:327, model:"75D" },
+      { miles:359, model:"90D" },
+      { miles:389, model:"P100D" }
     ],
     config: {
       speed: 55,
@@ -129,53 +129,50 @@ describe("test reducer", () => {
     });
 
     it('should handle SPEED_UP', () => {
-        expect(
-          appReducer(climateChangeState,{
+        expect(appReducer(climateChangeState, {
             type: 'SPEED_UP',
             value: 55,
             step: 5,
             maxValue: 70
-          })
-        ).toEqual(speedUpState)
-      })
-      it('should handle SPEED_DOWN', () => {
-        expect(
-          appReducer(speedUpState,{
+        })
+      ).toEqual(speedUpState)
+    });
+
+    it('should handle SPEED_DOWN', () => {
+        expect(appReducer(speedUpState, {
             type: 'SPEED_DOWN',
             value: 60,
             step: 5,
             minValue: 45
-          })
-        ).toEqual(speedDownState)
-      })
+        })
+      ).toEqual(speedDownState)
+    });
       
-      it('should handle CHANGE_WHEEL', () => {
-        expect(
-          appReducer(speedDownState,{
+    it('should handle CHANGE_WHEEL', () => {
+        expect(appReducer(speedDownState, {
             type: 'CHANGE_WHEEL',
             value: 21
           })
-        ).toEqual(wheelChangeState)
-      })
+      ).toEqual(wheelChangeState)
+    });
     
-      it('should handle TEMPERATURE_UP', () => {
-        expect(
-          appReducer(wheelChangeState,{
+    it('should handle TEMPERATURE_UP', () => {
+        expect(appReducer(wheelChangeState, {
             type: 'TEMPERATURE_UP',
             value: 20,
             step: 10,
             maxValue: 40
-          })
-        ).toEqual(temperatureUpState)
-      })
-      it('should handle TEMPERATURE_DOWN', () => {
-        expect(
-          appReducer(temperatureUpState,{
+        })
+      ).toEqual(temperatureUpState)
+    });
+
+    it('should handle TEMPERATURE_DOWN', () => {
+        expect(appReducer(temperatureUpState, {
             type: 'TEMPERATURE_DOWN',
             value: 30,
             step: 10,
             minValue: -10
-          })
-        ).toEqual(temperatureDownState)
-      })
+        })
+      ).toEqual(temperatureDownState)
+    });
 });
