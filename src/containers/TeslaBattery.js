@@ -125,10 +125,10 @@ class TeslaBattery extends React.Component {
         
         return ( 
             <form className = "tesla-battery">
-                <h1>Range Per Charge</h1>
+                <h1 className = "title-animation">Range Per Charge</h1>
                 <TeslaCar wheelSize = { config.wheels } />
                 <TeslaStats carstats = { carstats } />
-                <div className="tesla-controls cf">
+                <div className="tesla-controls cf tesla-controls-animation">
                     <TeslaCounter 
                         currentValue = { this.state.config.speed }
                         initValues = { this.props.counterDefaultVal.speed }

@@ -1,5 +1,6 @@
 .tesla-climate {
-    float: left; 
+    float: left;
+    margin-right: 35px; 
 }
 
 .tesla-climate__item {
